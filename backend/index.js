@@ -1,21 +1,37 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
+const express = require('express');
+const cors = require('cors');
+const employeeRouter = require('./routes/employee.route.js');
+const adminRouter = require('./routes/admin.route.js');
+const connectMongoDB = require('./config/config.js');
+require('dotenv').config();
 
-dotenv.config();
-
+// Initialize Express app and define the port
 const app = express();
+const PORT = process.env.PORT || 8080; 
+
+// Connect to MongoDB
+connectMongoDB();
+
+// Check if CORS is installed correctly
+try {
+    app.use(cors({
+        origin: 'http://localhost:3001', // Adjust to your frontend URL
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,  // Allow cookies if required
+    }));
+    console.log("CORS is enabled");
+} catch (error) {
+    console.error("Error enabling CORS:", error);
+}
+
+// Middleware setup
 app.use(express.json());
-app.use(cors());
 
-const PORT = 8080;
-const DB_URI = "mongodb://localhost:27017/8080"
+// Routes
+app.use('/api', employeeRouter);
+app.use('/api/admin', adminRouter);
 
-mongoose.connect(DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-  .catch((error) => console.log("err in connecting DB", error));
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}!`));
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Backend is listening on PORT ${PORT}`);
+});
