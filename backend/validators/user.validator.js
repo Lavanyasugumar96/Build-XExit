@@ -1,3 +1,4 @@
+
 const Joi = require("joi");
 
 const validateRegisterUser = Joi.object({

@@ -24,13 +24,13 @@ const RegistrationForm = () => {
             alert('Registration successful!');
             console.log(response.data);
         } catch (error) {
-            console.error('Registration error:', error.response?.data?.message || error.message);
+            console.error('Registration error:', error);
             alert('Registration failed. Please try again.');
         }
     };
 
     return (
-        <Container maxWidth="sm">
+        <Container>
             <Typography variant="h4" gutterBottom>
                 Register
             </Typography>

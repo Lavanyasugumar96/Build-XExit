@@ -1,5 +1,5 @@
-const express = require('express');
 const cors = require('cors');
+const express = require('express');
 const employeeRouter = require('./routes/employee.route.js');
 const adminRouter = require('./routes/admin.route.js');
 const connectMongoDB = require('./config/config.js');
@@ -12,19 +12,15 @@ const PORT = process.env.PORT || 8080;
 // Connect to MongoDB
 connectMongoDB();
 
-// Check if CORS is installed correctly
-try {
-    app.use(cors({
-        origin: 'http://localhost:3001', // Adjust to your frontend URL
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true,  // Allow cookies if required
-    }));
-    console.log("CORS is enabled");
-} catch (error) {
-    console.error("Error enabling CORS:", error);
-}
+const corsOptions = {
+    origin: 'http://localhost:3000', // Adjust to the URL of your frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,  // Allow cookies if required
+  };
 
 // Middleware setup
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use(express.json());
 
 // Routes
